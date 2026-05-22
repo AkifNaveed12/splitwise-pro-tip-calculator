@@ -1,35 +1,59 @@
-# SplitWise Pro — Tip & Bill Splitter
+# SplitWise Pro — Tip Calculator & Bill Splitter
 
-**SplitWise Pro** is a modern, responsive, and accessibility-compliant tip calculator and bill-splitting application built using HTML5, CSS3, and Vanilla JavaScript. 
+SplitWise Pro is a responsive tip calculator and bill splitting web application built using HTML, CSS, and Vanilla JavaScript.
 
-Inspired by professional fintech user interfaces, it provides a clean, clutter-free experience that calculates tip shares and grand totals in real-time, validates entries inline, and sanitizes input inputs dynamically.
+The application calculates:
+
+- tip amount
+- grand total
+- per-person share
+
+in real-time as the user types.
+
+The project focuses on:
+
+- responsive design
+- smooth frontend interactions
+- inline validation
+- accessibility
+- clean UI/UX
 
 ---
 
-## 🌟 Key Features
+# Features
 
-- **Real-Time Calculations**: Computes tip shares and total bills per person instantly as you type.
-- **Robust Input Sanitization**: Intercepts keystrokes to restrict input types (enforces decimals on bills, integers on people counts, and caps custom tips at 100%).
-- **Inline Validation**: Displays clear, non-intrusive warnings ("Can't be empty", "Can't be zero") inline alongside input labels to prevent layout shifts.
-- **Dynamic Text Scaling**: Automatically resizes currency readouts dynamically when large digits are inputted to prevent layout clipping and word wrapping on small viewports.
-- **Accessibility Optimized**: Integrates WCAG AA contrast compliance (`4.5:1`+ ratio), `:focus-visible` keyboard rings, and `aria-pressed` states on button preset toggles.
-- **Responsive Mobile-First Design**: Adapts gracefully from mobile viewports (stacked layout) to tablet and desktop viewports (two-column card grid).
+- Real-time calculations
+- Tip preset buttons
+- Custom tip percentage
+- Inline validation
+- Responsive mobile-first layout
+- Reset functionality
+- Keyboard-friendly interactions
+- Accessible form structure
 
 ---
 
-## 📁 Project Directory Structure
+# Tech Stack
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+---
+
+# Project Structure
 
 ```txt
 splitwise-pro-tip-calculator/
 │
-├── index.html       # Semantic UI markup
-├── styles.css       # Mobile-first design system & layout styling
-├── script.js        # State, validation, sanitization & calculations
+├── index.html
+├── styles.css
+├── script.js
 │
-├── README.md        # Project setup & run guide
-├── ANSWERS.md       # Assessment responses
+├── README.md
+├── ANSWERS.md
 │
-├── docs/            # Technical specifications
+├── docs/
 │   ├── idea.md
 │   ├── planning.md
 │   ├── context.md
@@ -37,46 +61,66 @@ splitwise-pro-tip-calculator/
 │   ├── userflows.md
 │   └── design.md
 │
-├── assets/          # Static mockup reference files
+├── assets/
 │
 └── .gitignore
 ```
 
 ---
 
-## 🚀 Getting Started
+# Running the Project
 
-### Prerequisites
-You only need a modern web browser to run the application. No node modules, servers, or compilation tools are required.
+## Option 1 — Open Directly
 
-### Run Locally
-To run the app locally, simply open `index.html` in your browser.
+Simply open:
 
-Alternatively, you can run a local web server (like Python or NPM `http-server`):
-```bash
-# Using Python
-python -m http.server 8000
-
-# Using Node (http-server)
-npx http-server
+```txt
+index.html
 ```
-Then navigate to `http://localhost:8000` (or the port specified by http-server).
+
+in any modern browser.
 
 ---
 
-## 🧪 Testing Checklist
+## Option 2 — Run Local Server
 
-During development, the following test matrix was run and verified:
-1. **Keystroke Filter**: Ensure typing letters inside Bill, People, or Custom Tip is blocked.
-2. **Decimal Limiter**: Verify entering `15.555` inside Bill is sanitized to `15.55`.
-3. **Preset Clears**: Confirm typing a Custom Tip clears selected tip presets, and vice versa.
-4. **Error Toggling**: Clear inputs to verify "Can't be empty" appears. Enter `0` to verify "Can't be zero" appears.
-5. **No Layout Shift**: Verify error displays do not cause other inputs to jump vertically.
-6. **Clipping Fix**: Enter `$10,000,000.00` to verify text scales down elegantly on one line.
-7. **Reset flow**: Click RESET to verify all variables revert to default settings.
+Using Python:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```txt
+http://localhost:8000
+```
 
 ---
 
-## 📄 License
+# Deployment
 
-Developed as part of the SplitWise Pro Internship Assessment. All rights reserved.
+Vercel Deployment URL:
+(Add deployed URL here)
+
+---
+
+# Author
+
+## Muhammad Akif Naveed
+
+### LinkedIn
+
+:contentReference[oaicite:1]{index=1}
+
+### GitHub
+
+:contentReference[oaicite:2]{index=2}
+
+### Portfolio
+
+:contentReference[oaicite:3]{index=3}
+
+### Email
+
+hello.akifnaveed@gmail.com
