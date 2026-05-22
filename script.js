@@ -1,5 +1,5 @@
 /**
- * SplitWise Pro — Core State & Logic
+ * SplitWise Pro — State, Calculations, Validation & Sanitization
  */
 
 // ==========================================================================
@@ -23,6 +23,11 @@ const tipAmountResult = document.getElementById('tip-amount-result');
 const totalResult = document.getElementById('total-result');
 const resetButton = document.getElementById('reset-button');
 
+// Error message containers
+const billError = document.getElementById('bill-error');
+const tipError = document.getElementById('tip-error');
+const peopleError = document.getElementById('people-error');
+
 // ==========================================================================
 // INITIALIZATION
 // ==========================================================================
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Initializes default UI states
+ * Initializes default UI states and clears errors
  */
 function initDefaults() {
   state.bill = 0;
@@ -45,6 +50,11 @@ function initDefaults() {
   peopleInput.value = '';
   customTipInput.value = '';
 
+  // Clear error messages
+  clearError(billInput, billError);
+  clearError(peopleInput, peopleError);
+  clearError(customTipInput, tipError);
+
   // Set default active preset button (15%)
   presetBtns.forEach(btn => {
     if (btn.dataset.tip === '15') {
@@ -55,11 +65,127 @@ function initDefaults() {
   });
 
   // Reset output text
-  tipAmountResult.textContent = '$0.00';
-  totalResult.textContent = '$0.00';
+  updateResultText(tipAmountResult, 0);
+  updateResultText(totalResult, 0);
 
   // Disable reset button
   resetButton.disabled = true;
+}
+
+// ==========================================================================
+// INPUT SANITIZATION HELPERS
+// ==========================================================================
+/**
+ * Restricts input to digits and at most one decimal point with 2 decimal digits
+ */
+function sanitizeDecimal(value) {
+  // Remove non-numeric characters except '.'
+  let clean = value.replace(/[^0-9.]/g, '');
+  
+  // Allow only one decimal point
+  const parts = clean.split('.');
+  if (parts.length > 2) {
+    clean = parts[0] + '.' + parts.slice(1).join('');
+  }
+  
+  // Limit to 2 decimal places
+  if (parts.length > 1 && parts[1].length > 2) {
+    clean = parts[0] + '.' + parts[1].substring(0, 2);
+  }
+  
+  return clean;
+}
+
+/**
+ * Restricts input to positive integer digits only
+ */
+function sanitizeInteger(value) {
+  return value.replace(/[^0-9]/g, '');
+}
+
+/**
+ * Restricts custom tip to integer digits between 0 and 100
+ */
+function sanitizeTip(value) {
+  let clean = value.replace(/[^0-9]/g, '');
+  if (clean !== '') {
+    const num = parseInt(clean, 10);
+    if (num > 100) return '100';
+    return num.toString();
+  }
+  return clean;
+}
+
+// ==========================================================================
+// INLINE VALIDATION ACTIONS
+// ==========================================================================
+function showError(inputEl, errorEl, message) {
+  errorEl.textContent = message;
+  errorEl.classList.add('visible');
+  inputEl.classList.add('input-error');
+}
+
+function clearError(inputEl, errorEl) {
+  errorEl.textContent = '';
+  errorEl.classList.remove('visible');
+  inputEl.classList.remove('input-error');
+}
+
+/**
+ * Validates Bill Input
+ */
+function validateBill() {
+  const val = billInput.value;
+  if (val === '') {
+    showError(billInput, billError, "Can't be empty");
+    return false;
+  }
+  
+  const num = parseFloat(val);
+  if (num <= 0) {
+    showError(billInput, billError, "Can't be zero");
+    return false;
+  }
+  
+  clearError(billInput, billError);
+  return true;
+}
+
+/**
+ * Validates People Input
+ */
+function validatePeople() {
+  const val = peopleInput.value;
+  if (val === '') {
+    showError(peopleInput, peopleError, "Can't be empty");
+    return false;
+  }
+  
+  const num = parseInt(val, 10);
+  if (num <= 0) {
+    showError(peopleInput, peopleError, "Can't be zero");
+    return false;
+  }
+  
+  clearError(peopleInput, peopleError);
+  return true;
+}
+
+/**
+ * Validates Custom Tip Input
+ */
+function validateTip() {
+  const val = customTipInput.value;
+  if (val !== '') {
+    const num = parseInt(val, 10);
+    if (num < 0 || num > 100) {
+      showError(customTipInput, tipError, "Must be 0-100");
+      return false;
+    }
+  }
+  
+  clearError(customTipInput, tipError);
+  return true;
 }
 
 // ==========================================================================
@@ -68,16 +194,34 @@ function initDefaults() {
 function setupEventListeners() {
   // Bill Input Event Listener
   billInput.addEventListener('input', (e) => {
-    const rawVal = e.target.value;
+    let rawVal = e.target.value;
+    const sanitized = sanitizeDecimal(rawVal);
+    
+    if (rawVal !== sanitized) {
+      billInput.value = sanitized;
+      rawVal = sanitized;
+    }
+    
     state.bill = rawVal === '' ? 0 : parseFloat(rawVal);
+    
+    validateBill();
     calculateAndRender();
     updateResetButtonState();
   });
 
   // People Input Event Listener
   peopleInput.addEventListener('input', (e) => {
-    const rawVal = e.target.value;
-    state.peopleCount = rawVal === '' ? 1 : parseFloat(rawVal);
+    let rawVal = e.target.value;
+    const sanitized = sanitizeInteger(rawVal);
+    
+    if (rawVal !== sanitized) {
+      peopleInput.value = sanitized;
+      rawVal = sanitized;
+    }
+    
+    state.peopleCount = rawVal === '' ? 1 : parseInt(rawVal, 10);
+    
+    validatePeople();
     calculateAndRender();
     updateResetButtonState();
   });
@@ -91,9 +235,10 @@ function setupEventListeners() {
       // Mark clicked preset as active
       e.target.classList.add('active');
       
-      // Clear custom tip
+      // Clear custom tip & custom tip errors
       customTipInput.value = '';
       state.customTip = '';
+      clearError(customTipInput, tipError);
       
       // Update state
       state.tipPercent = parseFloat(e.target.dataset.tip);
@@ -108,17 +253,23 @@ function setupEventListeners() {
     // Clear active presets
     presetBtns.forEach(b => b.classList.remove('active'));
     
-    // Read custom value
-    const rawVal = e.target.value;
+    let rawVal = e.target.value;
+    const sanitized = sanitizeTip(rawVal);
+    
+    if (rawVal !== sanitized) {
+      customTipInput.value = sanitized;
+      rawVal = sanitized;
+    }
+    
     state.customTip = rawVal;
     
     if (rawVal === '') {
-      // If custom tip is cleared, default back to no preset active, tip value is 0
       state.tipPercent = 0;
     } else {
       state.tipPercent = parseFloat(rawVal);
     }
     
+    validateTip();
     calculateAndRender();
     updateResetButtonState();
   });
@@ -131,6 +282,7 @@ function setupEventListeners() {
     } else {
       state.tipPercent = 0;
     }
+    validateTip();
     calculateAndRender();
   });
 
@@ -151,10 +303,19 @@ function calculateAndRender() {
   const peopleVal = state.peopleCount;
   const tipVal = state.customTip !== '' ? parseFloat(state.customTip) : state.tipPercent;
 
-  // Safe checks: If bill is 0 or negative, or people count is 0 or negative, display $0.00
-  if (isNaN(billVal) || billVal <= 0 || isNaN(peopleVal) || peopleVal <= 0 || isNaN(tipVal) || tipVal < 0) {
-    tipAmountResult.textContent = '$0.00';
-    totalResult.textContent = '$0.00';
+  // Check if inputs have active validation error classes
+  const hasErrors = billInput.classList.contains('input-error') || 
+                    peopleInput.classList.contains('input-error') || 
+                    customTipInput.classList.contains('input-error');
+
+  // Verify numerical viability
+  const isBillViable = !isNaN(billVal) && billVal > 0 && billInput.value !== '';
+  const isPeopleViable = !isNaN(peopleVal) && peopleVal > 0 && peopleInput.value !== '';
+  const isTipViable = !isNaN(tipVal) && tipVal >= 0;
+
+  if (hasErrors || !isBillViable || !isPeopleViable || !isTipViable) {
+    updateResultText(tipAmountResult, 0);
+    updateResultText(totalResult, 0);
     return;
   }
 
@@ -165,24 +326,47 @@ function calculateAndRender() {
   const tipPerPerson = totalTip / peopleVal;
   const totalPerPerson = grandTotal / peopleVal;
 
-  // Format to standard 2 decimal financial format
-  tipAmountResult.textContent = formatCurrency(tipPerPerson);
-  totalResult.textContent = formatCurrency(totalPerPerson);
+  // Format to standard 2 decimal financial format and update
+  updateResultText(tipAmountResult, tipPerPerson);
+  updateResultText(totalResult, totalPerPerson);
 }
 
 /**
  * Formats a number to currency string, e.g., 4.2833 -> $4.28
  */
 function formatCurrency(value) {
-  // Use standard rounding and formatting
   return '$' + value.toFixed(2);
+}
+
+/**
+ * Updates result element text content and scales typography to prevent clipping
+ */
+function updateResultText(element, value) {
+  const formatted = formatCurrency(value);
+  element.textContent = formatted;
+  
+  // Responsive typography sizing depending on digit count
+  const charCount = formatted.length;
+  
+  if (charCount > 13) {
+    element.style.setProperty('--result-font-size', '1.1rem');
+    element.style.setProperty('--result-font-size-desktop', '1.5rem');
+  } else if (charCount > 10) {
+    element.style.setProperty('--result-font-size', '1.4rem');
+    element.style.setProperty('--result-font-size-desktop', '2rem');
+  } else if (charCount > 7) {
+    element.style.setProperty('--result-font-size', '1.75rem');
+    element.style.setProperty('--result-font-size-desktop', '2.5rem');
+  } else {
+    element.style.removeProperty('--result-font-size');
+    element.style.removeProperty('--result-font-size-desktop');
+  }
 }
 
 /**
  * Checks if the reset button should be enabled/disabled
  */
 function updateResetButtonState() {
-  // If the user entered anything in Bill, Custom Tip, or People, or clicked a preset other than default (15%)
   const hasBillInput = billInput.value !== '';
   const hasPeopleInput = peopleInput.value !== '';
   const hasCustomTip = customTipInput.value !== '';

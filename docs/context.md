@@ -181,3 +181,32 @@ Every major implementation stage should append:
 ### Result
 
 - Responsive live-calculating engine successfully implemented.
+
+---
+
+## Phase 4 — Validation and Sanitization Completion
+
+### Files Modified
+
+- script.js
+- styles.css
+
+### Changes Made
+
+- Created real-time validation checks for Bill input (must be > 0) and People count input (must be positive integer >= 1).
+- Implemented real-time custom tip validation and input sanitization capped at 100.
+- Implemented character filter sanitization for inputs (regex filtering letters/decimals/negative values during keystrokes).
+- Designed inline error displays using transitions on opacity without triggering layout shifts.
+- Fixed results clipping/cutoff bug for large currency inputs by removing the `max-width: 60%` container constraint and using CSS custom properties for dynamic font resizing down based on length.
+
+### Problems Encountered
+
+- Visual clipping of currency amounts (like `$1150.00`) inside the results panel due to strict container width constraints.
+
+### Solution Applied
+
+- Removed `max-width: 60%` on the value container and enabled CSS variables (`--result-font-size`, `--result-font-size-desktop`) inside script.js that dynamically shrink the font sizes for values exceeding 7, 10, or 13 characters respectively.
+
+### Result
+
+- Robust inline error reporting and layout stability achieved, and large values fit nicely.
