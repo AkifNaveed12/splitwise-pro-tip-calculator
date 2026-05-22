@@ -27,7 +27,7 @@ http://localhost:8000
 ### Deployment
 
 Deployed URL:
-(Add Vercel URL here after deployment)
+https://portfolio-muhammad-akif-naveed.vercel.app/
 
 ---
 
