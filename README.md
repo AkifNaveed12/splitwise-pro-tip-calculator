@@ -101,7 +101,7 @@ http://localhost:8000
 # Deployment
 
 Vercel Deployment URL:
-(Add deployed URL here)
+(https://splitwise-pro-tip-calculator.vercel.app/)
 
 ---
 
