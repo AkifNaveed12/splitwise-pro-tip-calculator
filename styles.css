@@ -1,0 +1,518 @@
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES & VARIABLES
+   ========================================================================== */
+:root {
+  /* Colors - Fintech Palette */
+  --color-bg-app: #f4f6fa;
+  --color-card-bg: #ffffff;
+  
+  --color-text-main: #0c1a30;
+  --color-text-muted: #64748b;
+  --color-text-accent: #0b57d0;
+  --color-accent-light: #e8f0fe;
+  
+  /* Input & Button States */
+  --color-btn-preset: #f1f5f9;
+  --color-btn-preset-text: #0b57d0;
+  --color-btn-preset-hover: #e2e8f0;
+  --color-btn-preset-active: #0b57d0;
+  --color-btn-preset-active-text: #ffffff;
+  
+  /* Results Panel */
+  --color-panel-bg: #081730;
+  --color-result-value: #26c2ad;
+  --color-result-muted: #7f8c9b;
+  
+  /* Validation & Errors */
+  --color-error: #d93025;
+  --color-error-bg: #fce8e6;
+  --color-error-border: #f28b82;
+
+  /* Reset Button States */
+  --color-reset-active: #0b57d0;
+  --color-reset-hover: #0848a6;
+  --color-reset-disabled: #18273f;
+  --color-reset-disabled-text: #475569;
+
+  /* Shadows */
+  --shadow-card: 0 20px 40px rgba(13, 60, 155, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-input-focus: 0 0 0 3px rgba(11, 87, 208, 0.15);
+  --shadow-input-error-focus: 0 0 0 3px rgba(217, 48, 37, 0.15);
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================================================
+   CSS RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  height: -webkit-fill-available;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   LAYOUT STRUCTURE (MOBILE-FIRST)
+   ========================================================================== */
+.app-container {
+  width: 100%;
+  max-width: 375px; /* Mobile Viewport constraint for initial stacking check */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 0 1.5rem 0;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem 0 2rem 0;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-accent);
+}
+
+.logo-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Main Calculator Card */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+.calculator-card {
+  background-color: var(--color-card-bg);
+  width: 100%;
+  border-radius: 1.5rem 1.5rem 0 0; /* Stitch style: bottom squared on mobile, top rounded */
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ==========================================================================
+   INPUT PANEL (MOBILE-FIRST)
+   ========================================================================== */
+.input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.error-message {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-error);
+  transition: opacity 0.15s ease-in-out;
+  opacity: 0;
+}
+
+.error-message.visible {
+  opacity: 1;
+}
+
+/* Text Input Styling */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1.125rem;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  font-weight: 500;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-icon svg {
+  color: var(--color-text-muted);
+}
+
+.text-input {
+  width: 100%;
+  background-color: var(--color-btn-preset);
+  color: var(--color-text-main);
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: right;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.text-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+.text-input:focus {
+  border-color: var(--color-text-accent);
+  background-color: var(--color-card-bg);
+  box-shadow: var(--shadow-input-focus);
+}
+
+/* Text Input Error State */
+.text-input.input-error {
+  border-color: var(--color-error-border);
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.text-input.input-error:focus {
+  border-color: var(--color-error);
+  box-shadow: var(--shadow-input-error-focus);
+}
+
+.text-input.input-error ~ .input-icon,
+.text-input.input-error ~ .input-icon svg {
+  color: var(--color-error);
+}
+
+/* Tip Grid Styling */
+.tip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.tip-preset-btn {
+  background-color: var(--color-btn-preset);
+  color: var(--color-btn-preset-text);
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.tip-preset-btn:hover {
+  background-color: var(--color-btn-preset-hover);
+}
+
+.tip-preset-btn:focus-visible {
+  border-color: var(--color-text-accent);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.tip-preset-btn.active {
+  background-color: var(--color-btn-preset-active);
+  color: var(--color-btn-preset-active-text);
+}
+
+/* Custom Tip Input */
+.custom-tip-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-tip-input {
+  width: 100%;
+  background-color: var(--color-btn-preset);
+  color: var(--color-text-main);
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.custom-tip-input::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
+
+.custom-tip-input:hover {
+  background-color: var(--color-btn-preset-hover);
+}
+
+.custom-tip-input:focus {
+  background-color: var(--color-card-bg);
+  border-color: var(--color-text-accent);
+  box-shadow: var(--shadow-input-focus);
+  text-align: right;
+  padding: 0.75rem 1rem;
+}
+
+.custom-tip-input.input-error {
+  border-color: var(--color-error-border);
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.custom-tip-input.input-error:focus {
+  border-color: var(--color-error);
+  box-shadow: var(--shadow-input-error-focus);
+}
+
+/* ==========================================================================
+   RESULTS PANEL (MOBILE-FIRST)
+   ========================================================================== */
+.results-panel {
+  background-color: var(--color-panel-bg);
+  border-radius: 1rem;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.results-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-title {
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.result-subtitle {
+  color: var(--color-result-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.result-value-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
+
+.result-value {
+  color: var(--color-result-value);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: block;
+  text-align: right;
+}
+
+/* Reset Button */
+.reset-button {
+  width: 100%;
+  background-color: var(--color-reset-active);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.reset-button:hover:not(:disabled) {
+  background-color: var(--color-reset-hover);
+}
+
+.reset-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2), var(--shadow-input-focus);
+}
+
+.reset-button:disabled {
+  background-color: var(--color-reset-disabled);
+  color: var(--color-reset-disabled-text);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   FOOTER (MOBILE-FIRST)
+   ========================================================================== */
+.app-footer {
+  text-align: center;
+  padding: 1.5rem 1rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.footer-link:hover {
+  color: var(--color-text-accent);
+}
+
+.footer-copyright {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   DESKTOP RESPONSIVE LAYOUT & ENHANCEMENTS
+   ========================================================================== */
+@media (min-width: 800px) {
+  .app-container {
+    max-width: 920px;
+    padding: 2rem;
+    gap: 0;
+  }
+
+  .app-header {
+    padding: 0 0 2.5rem 0;
+    justify-content: flex-start;
+  }
+
+  .calculator-card {
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: stretch;
+  }
+
+  .input-panel {
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    gap: 2.25rem;
+    justify-content: space-between;
+  }
+
+  .tip-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.875rem;
+  }
+
+  .results-panel {
+    padding: 2.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .results-content {
+    gap: 2.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .result-title {
+    font-size: 1rem;
+  }
+
+  .result-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .result-value {
+    font-size: 3rem;
+    letter-spacing: -1px;
+  }
+
+  .reset-button {
+    margin-top: auto;
+    padding: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .app-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2rem 0 0 0;
+  }
+}

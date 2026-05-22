@@ -125,3 +125,31 @@ Every major implementation stage should append:
 ### Result
 
 - Stable responsive behavior achieved
+
+---
+
+## Phase 2 — UI Foundation Completion
+
+### Files Modified
+
+- index.html
+- styles.css
+
+### Changes Made
+
+- Created semantic HTML skeleton using modern semantic tags and custom SVGs.
+- Established global CSS reset and customized fintech design variables.
+- Designed mobile-first responsive layout with a split-column layout on desktop.
+- Integrated accessibility focus-visible styles and keyboard-friendly focus rings.
+
+### Problems Encountered
+
+- Preventing visual distortion and layout shifting during validation error states.
+
+### Solution Applied
+
+- Placed error message elements inline on the same row as inputs' labels using flexbox spacing. This guarantees the spacing is reserved and stable, avoiding input shifts.
+
+### Result
+
+- Mobile-first layout foundation and styling completed, ready for calculation logic.
