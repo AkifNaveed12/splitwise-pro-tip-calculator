@@ -111,15 +111,15 @@ Vercel Deployment URL:
 
 ### LinkedIn
 
-:contentReference[oaicite:1]{index=1}
+https://www.linkedin.com/in/akif-naveed-malik30
 
 ### GitHub
 
-:contentReference[oaicite:2]{index=2}
+https://github.com/AkifNaveed12
 
 ### Portfolio
 
-:contentReference[oaicite:3]{index=3}
+https://portfolio-muhammad-akif-naveed.vercel.app/
 
 ### Email
 
