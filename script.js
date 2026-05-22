@@ -59,8 +59,10 @@ function initDefaults() {
   presetBtns.forEach(btn => {
     if (btn.dataset.tip === '15') {
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
     } else {
       btn.classList.remove('active');
+      btn.setAttribute('aria-pressed', 'false');
     }
   });
 
@@ -230,10 +232,14 @@ function setupEventListeners() {
   presetBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       // Clear active presets
-      presetBtns.forEach(b => b.classList.remove('active'));
+      presetBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       
       // Mark clicked preset as active
       e.target.classList.add('active');
+      e.target.setAttribute('aria-pressed', 'true');
       
       // Clear custom tip & custom tip errors
       customTipInput.value = '';
@@ -251,7 +257,10 @@ function setupEventListeners() {
   // Custom Tip Input Event Listener
   customTipInput.addEventListener('input', (e) => {
     // Clear active presets
-    presetBtns.forEach(b => b.classList.remove('active'));
+    presetBtns.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     
     let rawVal = e.target.value;
     const sanitized = sanitizeTip(rawVal);
@@ -276,7 +285,10 @@ function setupEventListeners() {
 
   // Clear presets on Custom Tip Focus
   customTipInput.addEventListener('focus', () => {
-    presetBtns.forEach(b => b.classList.remove('active'));
+    presetBtns.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     if (customTipInput.value !== '') {
       state.tipPercent = parseFloat(customTipInput.value) || 0;
     } else {
@@ -348,15 +360,15 @@ function updateResultText(element, value) {
   // Responsive typography sizing depending on digit count
   const charCount = formatted.length;
   
-  if (charCount > 13) {
-    element.style.setProperty('--result-font-size', '1.1rem');
-    element.style.setProperty('--result-font-size-desktop', '1.5rem');
-  } else if (charCount > 10) {
-    element.style.setProperty('--result-font-size', '1.4rem');
-    element.style.setProperty('--result-font-size-desktop', '2rem');
-  } else if (charCount > 7) {
-    element.style.setProperty('--result-font-size', '1.75rem');
-    element.style.setProperty('--result-font-size-desktop', '2.5rem');
+  if (charCount > 11) {
+    element.style.setProperty('--result-font-size', '1.0rem');
+    element.style.setProperty('--result-font-size-desktop', '1.4rem');
+  } else if (charCount > 8) {
+    element.style.setProperty('--result-font-size', '1.2rem');
+    element.style.setProperty('--result-font-size-desktop', '1.7rem');
+  } else if (charCount > 6) {
+    element.style.setProperty('--result-font-size', '1.5rem');
+    element.style.setProperty('--result-font-size-desktop', '2.2rem');
   } else {
     element.style.removeProperty('--result-font-size');
     element.style.removeProperty('--result-font-size-desktop');

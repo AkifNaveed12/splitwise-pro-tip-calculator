@@ -210,3 +210,32 @@ Every major implementation stage should append:
 ### Result
 
 - Robust inline error reporting and layout stability achieved, and large values fit nicely.
+
+---
+
+## Phase 5 — Accessibility and UX Polish Completion
+
+### Files Modified
+
+- script.js
+- styles.css
+
+### Changes Made
+
+- Toggled `aria-pressed="true"/"false"` dynamically on the preset tip buttons to ensure screen readers read the active states.
+- Enhanced contrast of `--color-result-muted` variable from `#7f8c9b` to `#94a3b8` (4.6:1 contrast ratio, WCAG AA compliant).
+- Enforced `white-space: nowrap` on `.result-value-container` to guarantee numbers never wrap.
+- Refined the character count thresholds in the JS dynamic scaling to be more granular and prevent wrapping of 9-11 digit numbers.
+- Conducted full cross-device audits and interactive validation via browser subagent.
+
+### Problems Encountered
+
+- 10-character values (e.g. `$300000.00`) wrapped onto a second line because they were matched by a larger-font threshold and the container allowed wrapping.
+
+### Solution Applied
+
+- Enforced `white-space: nowrap` on the value container, and made the dynamic scaling thresholds more granular (e.g., scaling to `1.2rem` when count > 8).
+
+### Result
+
+- Accessibility improvements, WCAG AA color compliance, and zero-wrapping layout scaling successfully verified.

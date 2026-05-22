@@ -21,7 +21,7 @@
   /* Results Panel */
   --color-panel-bg: #081730;
   --color-result-value: #26c2ad;
-  --color-result-muted: #7f8c9b;
+  --color-result-muted: #94a3b8;
   
   /* Validation & Errors */
   --color-error: #d93025;
@@ -365,6 +365,7 @@ body {
   flex-grow: 1;
   text-align: right;
   min-width: 0;
+  white-space: nowrap;
 }
 
 .result-value {
