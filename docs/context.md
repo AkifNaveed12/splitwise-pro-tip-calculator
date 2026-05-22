@@ -153,3 +153,31 @@ Every major implementation stage should append:
 ### Result
 
 - Mobile-first layout foundation and styling completed, ready for calculation logic.
+
+---
+
+## Phase 3 — State and Logic Completion
+
+### Files Modified
+
+- script.js
+
+### Changes Made
+
+- Setup centralized global state tracking user selections and entries.
+- Built mathematical calculation engine that computes Tip Amount and Total per person with standard 2-decimal financial rounding.
+- Implemented real-time calculations that react to input events dynamically.
+- Developed preset tip buttons logic and custom tip input handlers that override preset active classes properly.
+- Created reset function which restores default values and resets results back to $0.00 while disabling the reset button.
+
+### Problems Encountered
+
+- Making sure the custom tip overrides the active preset button states and vice versa without double counting.
+
+### Solution Applied
+
+- Wired mutual clear listeners. Focusing or typing in the custom tip input clears the `.active` class of preset buttons, and clicking a preset button clears the custom input's text value.
+
+### Result
+
+- Responsive live-calculating engine successfully implemented.
